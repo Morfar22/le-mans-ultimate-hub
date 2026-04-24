@@ -14,16 +14,245 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      cars: {
+        Row: {
+          class: string
+          created_at: string
+          default_fuel_per_lap: number
+          default_tank_size: number
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          class: string
+          created_at?: string
+          default_fuel_per_lap: number
+          default_tank_size: number
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          class?: string
+          created_at?: string
+          default_fuel_per_lap?: number
+          default_tank_size?: number
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      saved_strategies: {
+        Row: {
+          car_id: string | null
+          created_at: string
+          id: string
+          inputs: Json
+          name: string
+          results: Json
+          track_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          car_id?: string | null
+          created_at?: string
+          id?: string
+          inputs: Json
+          name: string
+          results: Json
+          track_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          car_id?: string | null
+          created_at?: string
+          id?: string
+          inputs?: Json
+          name?: string
+          results?: Json
+          track_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_strategies_car_id_fkey"
+            columns: ["car_id"]
+            isOneToOne: false
+            referencedRelation: "cars"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "saved_strategies_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      track_suggestions: {
+        Row: {
+          created_at: string
+          id: string
+          note: string | null
+          proposed_changes: Json
+          proposed_name: string | null
+          status: string
+          track_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          proposed_changes: Json
+          proposed_name?: string | null
+          status?: string
+          track_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          proposed_changes?: Json
+          proposed_name?: string | null
+          status?: string
+          track_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_suggestions_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tracks: {
+        Row: {
+          avg_lap_seconds_hypercar: number | null
+          best_overtaking_spots: string | null
+          corners: number | null
+          country: string | null
+          created_at: string
+          danger_zones: string | null
+          fuel_estimate_gte: number | null
+          fuel_estimate_hypercar: number | null
+          fuel_estimate_lmp2: number | null
+          id: string
+          image_url: string | null
+          length_km: number
+          name: string
+          tips: string | null
+          tire_wear_level: string | null
+          updated_at: string
+        }
+        Insert: {
+          avg_lap_seconds_hypercar?: number | null
+          best_overtaking_spots?: string | null
+          corners?: number | null
+          country?: string | null
+          created_at?: string
+          danger_zones?: string | null
+          fuel_estimate_gte?: number | null
+          fuel_estimate_hypercar?: number | null
+          fuel_estimate_lmp2?: number | null
+          id?: string
+          image_url?: string | null
+          length_km: number
+          name: string
+          tips?: string | null
+          tire_wear_level?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avg_lap_seconds_hypercar?: number | null
+          best_overtaking_spots?: string | null
+          corners?: number | null
+          country?: string | null
+          created_at?: string
+          danger_zones?: string | null
+          fuel_estimate_gte?: number | null
+          fuel_estimate_hypercar?: number | null
+          fuel_estimate_lmp2?: number | null
+          id?: string
+          image_url?: string | null
+          length_km?: number
+          name?: string
+          tips?: string | null
+          tire_wear_level?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +379,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
