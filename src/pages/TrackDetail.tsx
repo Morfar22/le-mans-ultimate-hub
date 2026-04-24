@@ -45,12 +45,12 @@ export const TrackDetail = () => {
     if (!user) { toast({ title: "Sign in to suggest edits" }); return; }
     if (suggestion.trim().length < 10) { toast({ title: "Please add more detail" }); return; }
     setSubmitting(true);
-    const { error } = await supabase.from("track_suggestions").insert({
+    const { error } = await supabase.from("track_suggestions").insert([{
       user_id: user.id,
       track_id: id,
-      proposed_changes: { note: suggestion } as Record<string, unknown>,
+      proposed_changes: { note: suggestion } as never,
       note: suggestion,
-    });
+    }]);
     setSubmitting(false);
     if (error) toast({ title: "Failed", description: error.message, variant: "destructive" });
     else { toast({ title: "Thanks! Suggestion sent for review." }); setSuggestion(""); }

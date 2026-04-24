@@ -98,14 +98,14 @@ export const Calculator = () => {
     }
     const name = window.prompt("Name this strategy:", `${tracks.find(t => t.id === trackId)?.name ?? "Custom"} – ${inputs.raceMode === "minutes" ? `${inputs.raceMinutes}min` : `${inputs.raceLaps} laps`}`);
     if (!name) return;
-    const { error } = await supabase.from("saved_strategies").insert({
+    const { error } = await supabase.from("saved_strategies").insert([{
       user_id: user.id,
       name,
-      track_id: trackId || null,
-      car_id: carId || null,
-      inputs: inputs as unknown as Record<string, unknown>,
-      results: { totalLaps: result.totalLaps, pitStops: result.pitStops, totalFuel: result.totalFuel } as Record<string, unknown>,
-    });
+      track_id: trackId || undefined,
+      car_id: carId || undefined,
+      inputs: inputs as never,
+      results: { totalLaps: result.totalLaps, pitStops: result.pitStops, totalFuel: result.totalFuel } as never,
+    }]);
     if (error) toast({ title: "Couldn't save", description: error.message, variant: "destructive" });
     else toast({ title: "Strategy saved", description: name });
   };
